@@ -1,24 +1,28 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+* Ruby 2.6.6
 
-Things you may want to cover:
+* Postgres
+  - `bin/rails db:create`
 
-* Ruby version
+* Run test suite with rspec - `rspec` or `rspec spec/path/to/test`
 
-* System dependencies
+* Bringing up for local development
+  - Make sure you have Postgres running locally
+  - `git clone git@github.com:maxkadel/top_timeline.git`
+  - `cd top_timeline`
+  - `bundle install`
+  - `rails db:create`
+  - `rails db:migrate`
+  - `heroku local`
+  - visit [http://localhost:3000/](http://localhost:3000/) and you should see the application running locally
 
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+* heroku tasks ([reference](https://devcenter.heroku.com/articles/getting-started-with-rails6#create-a-new-rails-app-or-upgrade-an-existing-one))
+  - Deployment
+    - `git push heroku main`
+  - Run migrations
+    - `heroku run rake db:migrate`
+  - See information on running containers
+    - `heroku ps`
+  - See remote logs
+    - `heroku logs --tail`
