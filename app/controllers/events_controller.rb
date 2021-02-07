@@ -1,10 +1,9 @@
 class EventsController < ApplicationController
-  load_and_authorize_resource :through => :current_user
   before_action :set_event, only: %i[ show edit update destroy ]
-  before_action :set_events, only: %i[ index ]
 
   # GET /events or /events.json
   def index
+    @events = Event.all
   end
 
   # GET /events/1 or /events/1.json
@@ -61,10 +60,6 @@ class EventsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_event
       @event = Event.find(params[:id])
-    end
-
-    def set_events
-      @events = Event.accessible_by(current_ability)
     end
 
     # Only allow a list of trusted parameters through.
