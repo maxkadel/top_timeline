@@ -15,27 +15,67 @@
 RSpec.describe "/events", type: :request do
   # Event. As you add validations to Event, be sure to
   # adjust the attributes here as well.
+  let(:user) { User.create!(email: "test@test.com", password: "password") }
+  let(:other_user) { User.create!(email: "someone_else@test.com", password: "password") }
+  let(:target_user_event) { Event.create! valid_attributes }
+  let(:other_user_event) { Event.create! someone_elses_event }
   let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
+    {
+      start_time: Time.current,
+      name: "Any string will do",
+      user: user
+    }
+  }
+
+  let(:someone_elses_event) {
+    {
+      start_time: Time.current,
+      name: "This does not belong to you",
+      user: other_user
+    }
   }
 
   let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
+    {
+      name: "",
+      start_time: Time.current
+    }
   }
+
+  before do
+    login_as(user)
+    other_user
+  end
 
   describe "GET /index" do
     it "renders a successful response" do
-      Event.create! valid_attributes
+      target_user_event
       get events_url
+      expect(response).to be_successful
+    end
+
+    it "does not show someone else's events" do
+      target_user_event
+      other_user_event
+      get events_url
+      expect(response.body).to include("Any string will do")
+      expect(response.body).not_to include("This does not belong to you")
       expect(response).to be_successful
     end
   end
 
   describe "GET /show" do
     it "renders a successful response" do
-      event = Event.create! valid_attributes
+      event = target_user_event
       get event_url(event)
       expect(response).to be_successful
+    end
+
+    it "does not show someone else's event" do
+      event = other_user_event
+      expect do
+        get event_url(event)
+      end.to raise_error CanCan::AccessDenied
     end
   end
 
@@ -77,22 +117,24 @@ RSpec.describe "/events", type: :request do
 
       it "renders a successful response (i.e. to display the 'new' template)" do
         post events_url, params: { event: invalid_attributes }
-        expect(response).to be_successful
+        # 422 is what's returned when the model fails validations
+        expect(response).to have_http_status(:unprocessable_entity)
       end
     end
   end
 
   describe "PATCH /update" do
     context "with valid parameters" do
+      let(:start_time) { Time.current.round + 2.hours.from_now.round }
       let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
+        {start_time: start_time}
       }
 
       it "updates the requested event" do
         event = Event.create! valid_attributes
         patch event_url(event), params: { event: new_attributes }
         event.reload
-        skip("Add assertions for updated state")
+        expect(event.start_time).to eq start_time
       end
 
       it "redirects to the event" do
@@ -107,7 +149,8 @@ RSpec.describe "/events", type: :request do
       it "renders a successful response (i.e. to display the 'edit' template)" do
         event = Event.create! valid_attributes
         patch event_url(event), params: { event: invalid_attributes }
-        expect(response).to be_successful
+        # 422 is what's returned when the model fails validations
+        expect(response).to have_http_status(:unprocessable_entity)
       end
     end
   end
