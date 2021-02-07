@@ -1,5 +1,5 @@
 class EventsController < ApplicationController
-  load_and_authorize_resource
+  load_and_authorize_resource :through => :current_user
   before_action :set_event, only: %i[ show edit update destroy ]
   before_action :set_events, only: %i[ index ]
 
