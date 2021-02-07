@@ -15,13 +15,25 @@
 RSpec.describe "/events", type: :request do
   # Event. As you add validations to Event, be sure to
   # adjust the attributes here as well.
+  let(:user) { User.create!(email: "test@test.com", password: "password") }
   let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
+    {
+      start_time: Time.current,
+      name: "Any string will do",
+      user: user
+    }
   }
 
   let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
+    {
+      name: "",
+      start_time: Time.current
+    }
   }
+
+  before do
+    login_as(user)
+  end
 
   describe "GET /index" do
     it "renders a successful response" do
@@ -77,22 +89,24 @@ RSpec.describe "/events", type: :request do
 
       it "renders a successful response (i.e. to display the 'new' template)" do
         post events_url, params: { event: invalid_attributes }
-        expect(response).to be_successful
+        # 422 is what's returned when the model fails validations
+        expect(response).to have_http_status(422)
       end
     end
   end
 
   describe "PATCH /update" do
     context "with valid parameters" do
+      let(:start_time) { Time.current.round + 2.hours.from_now.round }
       let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
+        {start_time: start_time}
       }
 
       it "updates the requested event" do
         event = Event.create! valid_attributes
         patch event_url(event), params: { event: new_attributes }
         event.reload
-        skip("Add assertions for updated state")
+        expect(event.start_time).to eq start_time
       end
 
       it "redirects to the event" do
@@ -107,7 +121,8 @@ RSpec.describe "/events", type: :request do
       it "renders a successful response (i.e. to display the 'edit' template)" do
         event = Event.create! valid_attributes
         patch event_url(event), params: { event: invalid_attributes }
-        expect(response).to be_successful
+        # 422 is what's returned when the model fails validations
+        expect(response).to have_http_status(422)
       end
     end
   end
