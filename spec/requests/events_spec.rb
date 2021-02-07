@@ -75,7 +75,7 @@ RSpec.describe "/events", type: :request do
       event = other_user_event
       expect do
         get event_url(event)
-      end.to raise_error
+      end.to raise_error CanCan::AccessDenied
     end
   end
 
