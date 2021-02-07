@@ -10,7 +10,7 @@ class EventsController < ApplicationController
     start_date = params.fetch(:start_date, Time.zone.today).to_date
     @events = Event.where(
       start_time: start_date.beginning_of_month.beginning_of_week..start_date.end_of_month.end_of_week
-    )
+    ).accessible_by(current_ability)
   end
 
   # GET /events/1 or /events/1.json
