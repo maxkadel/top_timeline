@@ -4,6 +4,7 @@ env:
   POSTGRES_HOST: postgres
   POSTGRES_PASSWORD: postgres
   POSTGRES_DB: top_timeline_test
+  POSTGRES_PORT: 5432
 
 name: Rails tests
 
@@ -43,6 +44,7 @@ jobs:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: top_timeline_test
+          POSTGRES_PORT: 5432
         ports:
         - 5432:5432
         options: >-
