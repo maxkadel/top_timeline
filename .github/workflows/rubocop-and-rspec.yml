@@ -1,8 +1,9 @@
 env:
-  RUBY_VERSION: 2.4
+  RUBY_VERSION: 2.6
   POSTGRES_USER: postgres
+  POSTGRES_HOST: postgres
   POSTGRES_PASSWORD: ""
-  POSTGRES_DB: postgres
+  POSTGRES_DB: top_timeline_test
 
 name: Rails tests
 
@@ -34,11 +35,18 @@ jobs:
       name: Rspec
       needs: rubocop-test
       runs-on: ubuntu-latest
+      # Docker Hub image that `rspec-test` executes in
+      container: node:10.18-jessie
       services:
         postgres:
           image: postgres:latest
           ports:
           - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
       steps:
         - name: Checkout
           uses: actions/checkout@v2
@@ -48,8 +56,6 @@ jobs:
           uses: actions/setup-ruby@v1
           with:
             ruby-version: '2.6'
-        - name: Install postgres client
-          run: sudo apt-get install libpq-dev
         - name: Install dependencies
           run: |
             gem install bundler
