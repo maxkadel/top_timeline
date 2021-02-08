@@ -13,21 +13,6 @@ Metrics/BlockLength:
   Max: 133
 
 # Offense count: 1
-# Configuration parameters: Max.
-RSpec/ExampleLength:
-  Exclude:
-    - 'spec/requests/events_spec.rb'
-
-# Offense count: 1
-RSpec/MultipleExpectations:
-  Max: 3
-
-# Offense count: 12
-# Configuration parameters: AllowSubject.
-RSpec/MultipleMemoizedHelpers:
-  Max: 9
-
-# Offense count: 1
 # Configuration parameters: EnforcedStyle.
 # SupportedStyles: slashes, arguments
 Rails/FilePath:
