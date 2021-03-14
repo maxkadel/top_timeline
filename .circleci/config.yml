@@ -50,6 +50,8 @@ jobs:
           command: bundle exec rubocop --parallel --config .rubocop.yml
 
       - run:
+          name: Compile webpack
+          command: RAILS_ENV=test bundle exec rails webpacker:compile
           name: Run rspec in parallel
           command: |
             bundle exec rspec --profile 10 \
