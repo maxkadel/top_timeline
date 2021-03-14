@@ -1,7 +1,7 @@
 version: 2
 jobs:
   build:
-    working_directory: ~/my-app
+    working_directory: ~/top_timeline
     docker:
       - image: circleci/ruby:2.6.3-node-browsers
         environment:
@@ -16,8 +16,8 @@ jobs:
       # Install dependencies for Ruby Gems
       - restore_cache:
           keys:
-            - my-app-bundle-v1-{{ checksum "Gemfile.lock" }}
-            - my-app-bundle-v1-
+            - top_timeline-bundle-v1-{{ checksum "Gemfile.lock" }}
+            - top_timeline-bundle-v1-
 
       - run:
           name: Configure Bundler
@@ -31,7 +31,7 @@ jobs:
           command: bundle check || bundle install
 
       - save_cache:
-          key: my-app-bundle-v1-{{ checksum "Gemfile.lock" }}
+          key: top_timeline-bundle-v1-{{ checksum "Gemfile.lock" }}
           paths:
             - vendor/bundle
 
