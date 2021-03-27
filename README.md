@@ -1,7 +1,7 @@
 # README
 
 [![Ruby Style Guide](https://img.shields.io/badge/code_style-rubocop-brightgreen.svg)](https://github.com/rubocop-hq/rubocop)
-
+[![CircleCI](https://circleci.com/gh/maxkadel/top_timeline.svg?style=svg)](https://github.com/maxkadel/top_timeline)
 
 * Ruby 2.6.6
 
