@@ -12,7 +12,6 @@ jobs:
       - image: circleci/postgres:11-alpine
     steps:
       - checkout
-      - ruby/install-deps # use the ruby orb to install dependencies
       # use the node orb to install our packages
       # specifying that we use `yarn` and to cache dependencies with `yarn.lock`
       # learn more: https://circleci.com/docs/2.0/caching/
